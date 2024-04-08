@@ -4,13 +4,12 @@ import App from "./App.tsx";
 import { createTheme, ThemeProvider } from "@mui/material";
 
 const theme = createTheme({
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          background: "#cf4647",
-        },
-      },
+  palette: {
+    primary: {
+      main: "#CF4647",
+    },
+    secondary: {
+      main: "#fbd2d8",
     },
   },
 });
