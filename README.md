@@ -2,6 +2,8 @@
 
 Plataforma para buscar informações de herois da Marvel.
 
+Para acessar a aplicação [clique aqui](https://search-heroes-marvel.netlify.app/).
+
 ****
 ## *Sobre o projeto* ⭐️
 ### *Principais funcionalidades:*
