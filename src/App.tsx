@@ -11,7 +11,6 @@ import {
   getHeroByName,
   getSeriesByHeroId,
 } from "./services/service";
-import { AxiosError } from "axios";
 
 import "./global.css";
 
@@ -50,6 +49,16 @@ interface IError {
   type: "info" | "error";
 }
 
+interface IErrorResponse {
+  code: string;
+  response?: {
+    data?: {
+      status?: string;
+      message?: string;
+    };
+  };
+}
+
 function App() {
   const [hero, setHero] = useState<IHero | null>(null);
   const [loading, setLoading] = useState(false);
@@ -76,7 +85,7 @@ function App() {
         getSeriesByHeroId(heroData.id),
       ]);
     } catch (e) {
-      const error = e as AxiosError;
+      const error = e as IErrorResponse;
       if (error.code === "ERR_NETWORK") {
         setAlert({ content: "You are offline", type: "error" });
         const heroInfoJson = sessionStorage.getItem(search);
@@ -159,7 +168,7 @@ function App() {
 
       <Snackbar
         open={alertOpen}
-        autoHideDuration={6000}
+        autoHideDuration={5000}
         onClose={handleAlertClose}
         anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
       >
