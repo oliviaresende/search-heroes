@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Typography, Avatar } from "@mui/material";
+import { Grid, Typography, Avatar, Snackbar, Alert } from "@mui/material";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import Search from "./components/Search/Search";
@@ -11,6 +11,7 @@ import {
   getHeroByName,
   getSeriesByHeroId,
 } from "./services/service";
+import { AxiosError } from "axios";
 
 import "./global.css";
 
@@ -44,19 +45,61 @@ export interface IHero {
   ];
 }
 
+interface IError {
+  content: string;
+  type: "info" | "error";
+}
+
 function App() {
   const [hero, setHero] = useState<IHero | null>(null);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState<IError>({ content: "", type: "info" });
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const onSearch = async (search: string) => {
+    setHero(null);
     setLoading(true);
+    let heroData = null;
+    let comicsData = null;
+    let seriesData = null;
 
-    const heroData = await getHeroByName(search);
-    const comicsData = await getComicsByHeroId(heroData.id);
-    const SeriesData = await getSeriesByHeroId(heroData.id);
-    setHero({ ...heroData, comics: comicsData, series: SeriesData });
+    try {
+      heroData = await getHeroByName(search);
+      if (!heroData) {
+        setAlert({ content: "Hero not found", type: "info" });
+        setLoading(false);
+        setAlertOpen(true);
+        return;
+      }
+      [comicsData, seriesData] = await Promise.all([
+        getComicsByHeroId(heroData.id),
+        getSeriesByHeroId(heroData.id),
+      ]);
+    } catch (e) {
+      const error = e as AxiosError;
+      if (error.code === "ERR_NETWORK") {
+        setAlert({ content: "You are offline", type: "error" });
+      } else {
+        setAlert({
+          content:
+            error.response?.data?.status ||
+            error.response?.data?.message ||
+            "Undefined error",
+          type: "error",
+        });
+      }
+      setLoading(false);
+      setAlertOpen(true);
+      return;
+    }
+
+    setHero({ ...heroData, comics: comicsData, series: seriesData });
 
     setLoading(false);
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
   };
 
   return (
@@ -108,6 +151,22 @@ function App() {
       </Grid>
 
       <Footer />
+
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity={alert.type}
+          variant="filled"
+          sx={{ width: "100%", marginBottom: "56px" }}
+        >
+          {alert.content}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 }
