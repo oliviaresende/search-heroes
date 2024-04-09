@@ -12,16 +12,14 @@ interface IMyAccordion {
   title: string;
   contentData:
     | string
-    | [
-        {
-          id: number;
-          title: string;
-          thumbnail: {
-            extension: string;
-            path: string;
-          };
-        }
-      ];
+    | {
+        id: number;
+        title: string;
+        thumbnail: {
+          extension: string;
+          path: string;
+        };
+      }[];
 }
 
 const MyAccordion = ({ title, contentData }: IMyAccordion) => {
