@@ -53,18 +53,16 @@ const Search = ({ onSearch }: SearchProps) => {
           <Divider sx={{ height: 28, margin: 0.5 }} orientation="vertical" />
         </>
       )}
-      <Tooltip title={!search ? "Desabled" : "Search"}>
-        <span>
-          <IconButton
-            color="primary"
-            type="button"
-            sx={{ padding: "8px" }}
-            onClick={bindSearch}
-            disabled={!search}
-          >
-            <SearchIcon />
-          </IconButton>
-        </span>
+      <Tooltip title={!search ? "Disabled" : "Search"}>
+        <IconButton
+          color="primary"
+          type="button"
+          sx={{ padding: "8px" }}
+          onClick={bindSearch}
+          disabled={!search}
+        >
+          <SearchIcon />
+        </IconButton>
       </Tooltip>
     </Paper>
   );
