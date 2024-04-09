@@ -23,5 +23,33 @@ export const getHeroByName= async(name:string) => {
     console.trace(err)
   }); 
 
+  return res?.data.data.results[0];
+}
+
+export const getComicsByHeroId= async(heroId:number) => {
+  const ts = getTs()
+  const hash = getHash(ts)
+   const res = await axios({
+    method: "get",
+    url: `${apiBaseUrl}/characters/${heroId}/comics?ts=${ts}&apikey=${apiPublicKey}&hash=${hash}`,
+  }).catch((err)=>{
+    console.trace(err)
+  }); 
+
   return res?.data.data.results;
+
+}
+
+export const getSeriesByHeroId= async(heroId:number) => {
+  const ts = getTs()
+  const hash = getHash(ts)
+   const res = await axios({
+    method: "get",
+    url: `${apiBaseUrl}/characters/${heroId}/series?ts=${ts}&apikey=${apiPublicKey}&hash=${hash}`,
+  }).catch((err)=>{
+    console.trace(err)
+  }); 
+
+  return res?.data.data.results;
+
 }

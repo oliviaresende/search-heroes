@@ -12,6 +12,20 @@ const theme = createTheme({
       main: "#fbd2d8",
     },
   },
+  typography: {
+    allVariants: {
+      color: "#524656",
+    },
+  },
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
