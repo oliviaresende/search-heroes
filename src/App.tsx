@@ -79,6 +79,10 @@ function App() {
       const error = e as AxiosError;
       if (error.code === "ERR_NETWORK") {
         setAlert({ content: "You are offline", type: "error" });
+        const heroInfoJson = sessionStorage.getItem(search);
+        if (heroInfoJson) {
+          setHero(JSON.parse(heroInfoJson));
+        }
       } else {
         setAlert({
           content:
@@ -92,8 +96,9 @@ function App() {
       setAlertOpen(true);
       return;
     }
-
-    setHero({ ...heroData, comics: comicsData, series: seriesData });
+    const heroInfo = { ...heroData, comics: comicsData, series: seriesData };
+    setHero(heroInfo);
+    sessionStorage.setItem(search, JSON.stringify(heroInfo));
 
     setLoading(false);
   };
